@@ -3,20 +3,38 @@ article, section, aside, hgroup, nav, header, footer, figure, figcaption {
   display: block;
 }
 
+/* Clear inline-blocks */
+.clearfix::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+body {
+  text-align: center; /* Used to center divs */
+}
+
+#full-game {
+  position: relative;
+  display: inline-block; /* Used to center divs */
+  white-space: nowrap;
+  font-size: 0; /* Remove spaces around inline-blocks */
+}
+
 .game-button {
   position: relative;
+  display: inline-block; /* Prevent collapse on resizing too small */
   height: 300px;
   width: 300px;
-  border: solid 20px #333333;
+  border: solid 20px #333333;  
 }
 
 #top-left {
-  float: left;  
   background-color: green;
   border-top-left-radius: 100%;
 }
 
-#top-left:after {
+#top-left::after {
   position: absolute;
   content: "";  
   height: 150px;
@@ -28,12 +46,11 @@ article, section, aside, hgroup, nav, header, footer, figure, figcaption {
 }
 
 #top-right {
-  float: left;  
   background-color: red;
   border-top-right-radius: 100%;
 }
 
-#top-right:after {
+#top-right::after {
   position: absolute;
   content: "";  
   height: 150px;
@@ -45,13 +62,11 @@ article, section, aside, hgroup, nav, header, footer, figure, figcaption {
 }
 
 #bottom-left {
-  clear: both;
-  float: left;
   background-color: yellow;
   border-bottom-left-radius: 100%;
 }
 
-#bottom-left:after {
+#bottom-left::after {
   position: absolute;
   content: "";  
   height: 150px;
@@ -63,12 +78,11 @@ article, section, aside, hgroup, nav, header, footer, figure, figcaption {
 }
 
 #bottom-right {
-  float: left;  
   background-color: blue;
   border-bottom-right-radius: 100%;
 }
 
-#bottom-right:after {
+#bottom-right::after {
   position: absolute;
   content: "";  
   height: 150px;
@@ -77,4 +91,15 @@ article, section, aside, hgroup, nav, header, footer, figure, figcaption {
   left: -20px; /* Move into border for true cicle. */
   background-color: #333333;
   border-bottom-right-radius: 100%;
+}
+
+#center {  
+  position: absolute;
+  top: 210px;
+  left: 210px;
+  height: 260px;
+  width: 260px;
+	background-color: white;
+	border-radius: 100%;
+	font-size: 34px;
 }
