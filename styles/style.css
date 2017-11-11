@@ -3,15 +3,15 @@ article, section, aside, hgroup, nav, header, footer, figure, figcaption {
   display: block;
 }
 
+body {
+  text-align: center; /* Used to center divs */
+}
+
 /* Clear inline-blocks */
 .clearfix::after {
   content: "";
   clear: both;
   display: table;
-}
-
-body {
-  text-align: center; /* Used to center divs */
 }
 
 #full-game {
@@ -93,13 +93,57 @@ body {
   border-bottom-right-radius: 100%;
 }
 
+#circle {
+  position: absolute;
+  content: "";
+  top: 200px;
+  left: 200px;
+  width: 0px;
+  height: 0px;
+  border: 140px solid white;
+  border-radius: 100%;  
+}
+
 #center {  
   position: absolute;
-  top: 210px;
-  left: 210px;
-  height: 260px;
-  width: 260px;
-	background-color: white;
-	border-radius: 100%;
-	font-size: 34px;
+  display: inline-block; /* Used to center divs */
+  top: 290px;
+  left: 220px;
+  width: auto;
+  height: auto;
+  font-size: 34px;
+}
+
+#center > div:not(.clearfix) {  
+  display: inline-block; /* Keep in line unless clearfix*/
+  z-index: 100;
+}
+
+#center > div:not(.clearfix)::before {
+  display: block;
+  content: "";
+}
+
+#count::before, #start::before, #strict::before {
+  top: 20px;
+  height: 10px;
+  content: "5";
+}
+
+#switch::before {
+  height: 40px;
+}
+
+/* === Interactive CSS === */
+#top-left:hover {
+ background-color: rgb(0, 100, 0);
+}
+#top-right:hover {
+  background-color: rgb(200,0,0);
+}
+#bottom-left:hover {
+  background-color: rgb(177, 177, 0);
+}
+#bottom-right:hover {
+  background-color: rgb(0, 0, 207);
 }
