@@ -2,3 +2,79 @@
 article, section, aside, hgroup, nav, header, footer, figure, figcaption {
   display: block;
 }
+
+.game-button {
+  position: relative;
+  height: 300px;
+  width: 300px;
+  border: solid 20px #333333;
+}
+
+#top-left {
+  float: left;  
+  background-color: green;
+  border-top-left-radius: 100%;
+}
+
+#top-left:after {
+  position: absolute;
+  content: "";  
+  height: 150px;
+  width: 150px;  
+  top: 170px; /* Move into border for true cicle. */
+  left: 170px; /* Move into border for true cicle. */
+  background-color: #333333;
+  border-top-left-radius: 100%;
+}
+
+#top-right {
+  float: left;  
+  background-color: red;
+  border-top-right-radius: 100%;
+}
+
+#top-right:after {
+  position: absolute;
+  content: "";  
+  height: 150px;
+  width: 150px;  
+  top: 170px; /* Move into border for true cicle. */
+  left: -20px; /* Move into border for true cicle. */
+  background-color: #333333;
+  border-top-right-radius: 100%;
+}
+
+#bottom-left {
+  clear: both;
+  float: left;
+  background-color: yellow;
+  border-bottom-left-radius: 100%;
+}
+
+#bottom-left:after {
+  position: absolute;
+  content: "";  
+  height: 150px;
+  width: 150px;  
+  top: -20px; /* Move into border for true cicle. */
+  left: 170px; /* Move into border for true cicle. */
+  background-color: #333333;
+  border-bottom-left-radius: 100%;
+}
+
+#bottom-right {
+  float: left;  
+  background-color: blue;
+  border-bottom-right-radius: 100%;
+}
+
+#bottom-right:after {
+  position: absolute;
+  content: "";  
+  height: 150px;
+  width: 150px;  
+  top: -20px; /* Move into border for true cicle. */
+  left: -20px; /* Move into border for true cicle. */
+  background-color: #333333;
+  border-bottom-right-radius: 100%;
+}
