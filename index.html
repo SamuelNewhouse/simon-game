@@ -1,17 +1,18 @@
-<!DOCTYPE html>
-<html>
+<!-- Doctype HTML5 -->
+<!doctype html>
+<html lang="en" dir="ltr">
 
 <head>
-	<meta charset="UTF-8">
+	<meta charset="utf-8">
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Simon Game</title>
 	<meta name="description" content='This is my submission for the "Build a Simon Game" project on www.freecodecamp.com.'>
 	<meta name="author" content="Samuel Newhouse">	
-	<!-- Scale for mobile devices.  https://www.w3schools.com/css/css_rwd_viewport.asp-->
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<!--  Use async and defer to speed up loading.  http://www.growingwiththeweb.com/2014/02/async-vs-defer-attributes.html  -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" async defer></script>
 	<script src="scripts/script.js" defer></script>
-	<link href="styles/style.css" rel="stylesheet" type="text/css">
-	<title>Simon Game</title>
+	<link href="styles/style.css" rel="stylesheet" type="text/css">	
 </head>
 
 <body>
@@ -27,9 +28,8 @@
 			<div id="center">
 				<div id="count">--</div>
 				<div id="start"></div>
-				<div id="strict">Strict</div>
-				<div class="clearfix"></div>
-				<div id="switch">Off On</div>
+				<div id="strict"></div>
+				<div id="switch-container"> <span>Off</span> <span id=switch-mechanism></span> <span>On</span> </div>
 			</div>
 		</div>
 	</section>

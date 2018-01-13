@@ -1,6 +1,171 @@
-/* Older browser compatability. */
-article, section, aside, hgroup, nav, header, footer, figure, figcaption {
-  display: block;
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+/*! normalize.css v7.0.0 | MIT License | github.com/necolas/normalize.css    */
+html {
+	line-height: 1.15;
+	-ms-text-size-adjust: 100%;
+	-webkit-text-size-adjust: 100%;
+}
+body {
+	margin: 0;
+}
+article,aside,footer,header,nav,section {
+	display: block;
+}
+h1 {
+	font-size: 2em;
+	margin: 0.67em 0;
+}
+figcaption,figure,main {
+	display: block;
+}
+figure {
+	margin: 1em 40px;
+}
+hr {
+	box-sizing: content-box;
+	height: 0;
+	overflow: visible;
+}
+pre {
+	font-family: monospace, monospace;
+	font-size: 1em;
+}
+a {
+	background-color: transparent;
+	-webkit-text-decoration-skip: objects;
+}
+abbr[title] {
+	border-bottom: none;
+	text-decoration: underline;
+	text-decoration: underline dotted;
+}
+b,strong {
+	font-weight: inherit;
+}
+b,strong {
+	font-weight: bolder;
+}
+code,kbd,samp {
+	font-family: monospace, monospace;
+	font-size: 1em;
+}
+dfn {
+	font-style: italic;
+}
+mark {
+	background-color: #ff0;
+	color: #000;
+}
+small {
+	font-size: 80%;
+}
+sub,sup {
+	font-size: 75%;
+	line-height: 0;
+	position: relative;
+	vertical-align: baseline;
+}
+sub {
+	bottom: -0.25em;
+}
+sup {
+	top: -0.5em;
+}
+audio,video {
+	display: inline-block;
+}
+audio:not([controls]) {
+	display: none;
+	height: 0;
+}
+img {
+	border-style: none;
+}
+svg:not(:root) {
+	overflow: hidden;
+}
+button,input,optgroup,select,textarea {
+	font-family: sans-serif;
+	font-size: 100%;
+	line-height: 1.15;
+	margin: 0;
+}
+button,input {
+	overflow: visible;
+}
+button,select {
+	text-transform: none;
+}
+button,html [type="button"],[type="reset"],[type="submit"] {
+	-webkit-appearance: button;
+}
+button::-moz-focus-inner,[type="button"]::-moz-focus-inner,[type="reset"]::-moz-focus-inner,[type="submit"]::-moz-focus-inner {
+	border-style: none;
+	padding: 0;
+}
+button:-moz-focusring,[type="button"]:-moz-focusring,[type="reset"]:-moz-focusring,[type="submit"]:-moz-focusring {
+	outline: 1px dotted ButtonText;
+}
+fieldset {
+	padding: 0.35em 0.75em 0.625em;
+}
+legend {
+	box-sizing: border-box;
+	color: inherit;
+	display: table;
+	max-width: 100%;
+	padding: 0;
+	white-space: normal;
+}
+progress {
+	display: inline-block;
+	vertical-align: baseline;
+}
+textarea {
+	overflow: auto;
+}
+[type="checkbox"],[type="radio"] {
+	box-sizing: border-box;
+	padding: 0;
+}
+[type="number"]::-webkit-inner-spin-button,[type="number"]::-webkit-outer-spin-button {
+	height: auto;
+}
+[type="search"] {
+	-webkit-appearance: textfield;
+	outline-offset: -2px;
+}
+[type="search"]::-webkit-search-cancel-button,[type="search"]::-webkit-search-decoration {
+	-webkit-appearance: none;
+}
+::-webkit-file-upload-button {
+	-webkit-appearance: button;
+	font: inherit;
+}
+details,menu {
+	display: block;
+}
+summary {
+	display: list-item;
+}
+canvas {
+	display: inline-block;
+}
+template {
+	display: none;
+}
+[hidden] {
+	display: none;
+}
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+/* Matters of convenience                                                    */
+
+html {
+  box-sizing: border-box;
+}
+*, *:before, *:after {
+  box-sizing: inherit;  
 }
 
 body {
@@ -14,6 +179,9 @@ body {
   display: table;
 }
 
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+/* Main content                                                              */
+
 #full-game {
   position: relative;
   display: inline-block; /* Used to center divs */
@@ -26,22 +194,11 @@ body {
   display: inline-block; /* Prevent collapse on resizing too small */
   height: 300px;
   width: 300px;
-  border: solid 20px #333333;  
+  border: solid 20px #333333;
 }
 
 #top-left {
   background-color: green;
-  border-top-left-radius: 100%;
-}
-
-#top-left::after {
-  position: absolute;
-  content: "";  
-  height: 150px;
-  width: 150px;  
-  top: 170px; /* Move into border for true cicle. */
-  left: 170px; /* Move into border for true cicle. */
-  background-color: #333333;
   border-top-left-radius: 100%;
 }
 
@@ -50,30 +207,8 @@ body {
   border-top-right-radius: 100%;
 }
 
-#top-right::after {
-  position: absolute;
-  content: "";  
-  height: 150px;
-  width: 150px;  
-  top: 170px; /* Move into border for true cicle. */
-  left: -20px; /* Move into border for true cicle. */
-  background-color: #333333;
-  border-top-right-radius: 100%;
-}
-
 #bottom-left {
   background-color: yellow;
-  border-bottom-left-radius: 100%;
-}
-
-#bottom-left::after {
-  position: absolute;
-  content: "";  
-  height: 150px;
-  width: 150px;  
-  top: -20px; /* Move into border for true cicle. */
-  left: 170px; /* Move into border for true cicle. */
-  background-color: #333333;
   border-bottom-left-radius: 100%;
 }
 
@@ -82,41 +217,33 @@ body {
   border-bottom-right-radius: 100%;
 }
 
-#bottom-right::after {
-  position: absolute;
-  content: "";  
-  height: 150px;
-  width: 150px;  
-  top: -20px; /* Move into border for true cicle. */
-  left: -20px; /* Move into border for true cicle. */
-  background-color: #333333;
-  border-bottom-right-radius: 100%;
-}
-
 #circle {
   position: absolute;
   content: "";
-  top: 200px;
-  left: 200px;
+  top: 150px;
+  left: 150px;
   width: 0px;
   height: 0px;
-  border: 140px solid white;
+  border: 150px solid #333333; /* Use border to prevent box from overlapping buttons. */
   border-radius: 100%;  
 }
 
-#center {  
+#circle::after {
   position: absolute;
-  display: inline-block; /* Used to center divs */
-  top: 290px;
-  left: 220px;
-  width: auto;
-  height: auto;
-  font-size: 32px;
+  content: "";
+  top: -140px;
+  left: -140px;
+  width: 0px;
+  height: 0px;
+  border: 140px solid white; /* Use border to prevent box from overlapping buttons. */
+  border-radius: 100%;
 }
 
-#center > div:not(.clearfix) {  
-  display: inline-block; /* Keep in line unless clearfix*/
-  z-index: 100;
+#center {
+  position: absolute;    
+  top: 230px;
+  left: 190px;
+  font-size: 32px;
 }
 
 #count {
@@ -130,10 +257,10 @@ body {
   width: 40px;
 }
 
-#count::after {  
+#count::after {
   position: absolute;
-  pointer-events: none;  
-  content: "Count";  
+  pointer-events: none;
+  content: "Count";
   color: black;
   background-color: transparent;
   top: 35px;
@@ -144,29 +271,60 @@ body {
   position: absolute;
   content: "";
   background-color: rgb(35, 117, 66);
-  color: black;
   top: 15px;
-  left: 80px;
+  left: 100px;
   height: 40px;
   width: 40px;
   border: 2px solid black;
   border-radius: 100%;
 }
 
-#start::after {  
+#start::after {
   position: absolute;
-  pointer-events: none;  
-  content: "Start";  
+  pointer-events: none;
+  content: "Start";
   color: black;
   background-color: transparent;
   top: 35px;
   left: -12px;
 }
 
-
-
-#switch::before {
+#strict {
+  position: absolute;
+  content: "";
+  background-color: rgb(143, 135, 32);
+  top: 15px;
+  left: 180px;
   height: 40px;
+  width: 40px;
+  border: 2px solid black;
+  border-radius: 100%;
+}
+
+#strict::after {
+  position: absolute;
+  pointer-events: none;
+  content: "Strict";
+  color: black;
+  background-color: transparent;
+  top: 35px;
+  left: -12px;
+}
+
+#switch-mechanism {
+  position: relative;
+  display: block;
+  float: left;
+  background: linear-gradient(to right, rgb(255,255,255) 20%, rgb(106, 93, 226) 20%, rgb(106, 93, 226) 80%, rgb(255,255,255) 80%);
+  height: 20px;
+  width: 60px;
+  border: 2px solid black;
+}
+
+#switch-container span {
+  position: relative;
+  display: block;
+  float: left;
 }
 
 /* === Interactive CSS === */
