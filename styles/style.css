@@ -2,20 +2,21 @@
 /*! normalize.css v7.0.0 | MIT License | github.com/necolas/normalize.css    */
 html {
 	line-height: 1.15;
-	-ms-text-size-adjust: 100%;
 	-webkit-text-size-adjust: 100%;
+	    -ms-text-size-adjust: 100%;
 }
 body {
 	margin: 0;
 }
-article,aside,footer,header,nav,section {
+article , aside , footer , header , nav , section {
 	display: block;
 }
 h1 {
+	margin: .67em 0;
+
 	font-size: 2em;
-	margin: 0.67em 0;
 }
-figcaption,figure,main {
+figcaption , figure , main {
 	display: block;
 }
 figure {
@@ -24,6 +25,7 @@ figure {
 hr {
 	box-sizing: content-box;
 	height: 0;
+
 	overflow: visible;
 }
 pre {
@@ -39,13 +41,13 @@ abbr[title] {
 	text-decoration: underline;
 	text-decoration: underline dotted;
 }
-b,strong {
+b , strong {
 	font-weight: inherit;
 }
-b,strong {
+b , strong {
 	font-weight: bolder;
 }
-code,kbd,samp {
+code , kbd , samp {
 	font-family: monospace, monospace;
 	font-size: 1em;
 }
@@ -59,19 +61,20 @@ mark {
 small {
 	font-size: 80%;
 }
-sub,sup {
+sub , sup {
+	position: relative;
+
 	font-size: 75%;
 	line-height: 0;
-	position: relative;
 	vertical-align: baseline;
 }
 sub {
-	bottom: -0.25em;
+	bottom: -.25em;
 }
 sup {
-	top: -0.5em;
+	top: -.5em;
 }
-audio,video {
+audio , video {
 	display: inline-block;
 }
 audio:not([controls]) {
@@ -84,65 +87,69 @@ img {
 svg:not(:root) {
 	overflow: hidden;
 }
-button,input,optgroup,select,textarea {
+button , input , optgroup , select , textarea {
+	margin: 0;
+
 	font-family: sans-serif;
 	font-size: 100%;
 	line-height: 1.15;
-	margin: 0;
 }
-button,input {
+button , input {
 	overflow: visible;
 }
-button,select {
+button , select {
 	text-transform: none;
 }
-button,html [type="button"],[type="reset"],[type="submit"] {
+button , html [type='button'] , [type='reset'] , [type='submit'] {
 	-webkit-appearance: button;
 }
-button::-moz-focus-inner,[type="button"]::-moz-focus-inner,[type="reset"]::-moz-focus-inner,[type="submit"]::-moz-focus-inner {
-	border-style: none;
+button::-moz-focus-inner , [type='button']::-moz-focus-inner , [type='reset']::-moz-focus-inner , [type='submit']::-moz-focus-inner {
 	padding: 0;
+
+	border-style: none;
 }
-button:-moz-focusring,[type="button"]:-moz-focusring,[type="reset"]:-moz-focusring,[type="submit"]:-moz-focusring {
+button:-moz-focusring , [type='button']:-moz-focusring , [type='reset']:-moz-focusring , [type='submit']:-moz-focusring {
 	outline: 1px dotted ButtonText;
 }
 fieldset {
-	padding: 0.35em 0.75em 0.625em;
+	padding: .35em .75em .625em;
 }
 legend {
-	box-sizing: border-box;
-	color: inherit;
 	display: table;
-	max-width: 100%;
+	box-sizing: border-box;
 	padding: 0;
+	max-width: 100%;
 	white-space: normal;
+
+	color: inherit;
 }
 progress {
 	display: inline-block;
+
 	vertical-align: baseline;
 }
 textarea {
 	overflow: auto;
 }
-[type="checkbox"],[type="radio"] {
+[type='checkbox'] , [type='radio'] {
 	box-sizing: border-box;
 	padding: 0;
 }
-[type="number"]::-webkit-inner-spin-button,[type="number"]::-webkit-outer-spin-button {
+[type='number']::-webkit-inner-spin-button , [type='number']::-webkit-outer-spin-button {
 	height: auto;
 }
-[type="search"] {
+[type='search'] {
 	-webkit-appearance: textfield;
 	outline-offset: -2px;
 }
-[type="search"]::-webkit-search-cancel-button,[type="search"]::-webkit-search-decoration {
+[type='search']::-webkit-search-cancel-button , [type='search']::-webkit-search-decoration {
 	-webkit-appearance: none;
 }
 ::-webkit-file-upload-button {
 	-webkit-appearance: button;
 	font: inherit;
 }
-details,menu {
+details , menu {
 	display: block;
 }
 summary {
@@ -162,184 +169,191 @@ template {
 /* Matters of convenience                                                    */
 
 html {
-  box-sizing: border-box;
+	box-sizing: border-box;
 }
-*, *:before, *:after {
-  box-sizing: inherit;  
+* , *:before , *:after {
+	box-sizing: inherit;
 }
 
 body {
-  text-align: center; /* Used to center divs */
+	text-align: center; /* Used to center divs */
 }
 
 /* Clear inline-blocks */
 .clearfix::after {
-  content: "";
-  clear: both;
-  display: table;
+	display: table;
+	clear: both;
+
+	content: '';
 }
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Main content                                                              */
 
 #full-game {
-  position: relative;
-  display: inline-block; /* Used to center divs */
-  white-space: nowrap;
-  font-size: 0; /* Remove spaces around inline-blocks */
+	display: inline-block; /* Used to center divs */
+	position: relative;
+	white-space: nowrap;
+
+	font-size: 0; /* Remove spaces around inline-blocks */
 }
 
 .game-button {
-  position: relative;
-  display: inline-block; /* Prevent collapse on resizing too small */
-  height: 300px;
-  width: 300px;
-  border: solid 20px #333333;
+	display: inline-block; /* Prevent collapse on resizing too small */
+	position: relative;
+	height: 300px;
+	width: 300px;
+	border: solid 20px #333;
 }
 
 #top-left {
-  background-color: green;
-  border-top-left-radius: 100%;
+	background-color: green;
+	border-top-left-radius: 100%;
 }
 
 #top-right {
-  background-color: red;
-  border-top-right-radius: 100%;
+	background-color: red;
+	border-top-right-radius: 100%;
 }
 
 #bottom-left {
-  background-color: yellow;
-  border-bottom-left-radius: 100%;
+	background-color: yellow;
+	border-bottom-left-radius: 100%;
 }
 
 #bottom-right {
-  background-color: blue;
-  border-bottom-right-radius: 100%;
+	background-color: blue;
+	border-bottom-right-radius: 100%;
 }
 
 #circle {
-  position: absolute;
-  content: "";
-  top: 150px;
-  left: 150px;
-  width: 0px;
-  height: 0px;
-  border: 150px solid #333333; /* Use border to prevent box from overlapping buttons. */
-  border-radius: 100%;  
+	position: absolute;
+	height: 0;
+	width: 0;
+	top: 150px;
+	left: 150px;
+	border: 150px solid #333; /* Use border to prevent box from overlapping buttons. */
+	border-radius: 100%;
+
+	content: '';
 }
 
 #circle::after {
-  position: absolute;
-  content: "";
-  top: -140px;
-  left: -140px;
-  width: 0px;
-  height: 0px;
-  border: 140px solid white; /* Use border to prevent box from overlapping buttons. */
-  border-radius: 100%;
+	position: absolute;
+	height: 0;
+	width: 0;
+	top: -140px;
+	left: -140px;
+	border: 140px solid white; /* Use border to prevent box from overlapping buttons. */
+	border-radius: 100%;
+
+	content: '';
 }
 
 #center {
-  position: absolute;    
-  top: 230px;
-  left: 190px;
-  font-size: 32px;
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+	align-content: space-around;
+	flex-flow: row wrap;
+	position: absolute;
+	height: 170px;
+	width: 270px;
+	top: 250px;
+	left: 161px;
+
+	font-size: 32px;
 }
 
 #count {
-  position: absolute;
-  content: "--";
-  background-color: rgb(117, 35, 35);
-  color: black;
-  top: 15px;
-  left: 10px;
-  height: 40px;
-  width: 40px;
+	float: left;
+	margin: 10px;
+	position: relative;
 }
 
+/*
 #count::after {
-  position: absolute;
-  pointer-events: none;
-  content: "Count";
-  color: black;
-  background-color: transparent;
-  top: 35px;
-  left: -22px;
-}
+	position: absolute;
+	top: -30px;
+	left: 30px;
+
+	background-color: rgb(117, 35, 35);
+	color: black;
+	content: '--';
+	pointer-events: none;
+}*/
 
 #start {
-  position: absolute;
-  content: "";
-  background-color: rgb(35, 117, 66);
-  top: 15px;
-  left: 100px;
-  height: 40px;
-  width: 40px;
-  border: 2px solid black;
-  border-radius: 100%;
+	float: left;
+	margin: 10px;
+	position: relative;
 }
-
+/*
 #start::after {
-  position: absolute;
-  pointer-events: none;
-  content: "Start";
-  color: black;
-  background-color: transparent;
-  top: 35px;
+	position: absolute;
+	top: 35px;
   left: -12px;
+  border: 2px solid black;
+	border-radius: 100%;
+
+	background-color: rgb(35, 117, 66);
+	color: black;
+	pointer-events: none;
 }
+*/
 
 #strict {
-  position: absolute;
-  content: "";
-  background-color: rgb(143, 135, 32);
-  top: 15px;
-  left: 180px;
-  height: 40px;
-  width: 40px;
-  border: 2px solid black;
-  border-radius: 100%;
+	float: left;
+	margin: 10px;
+	position: relative;
 }
 
+/*
 #strict::after {
-  position: absolute;
-  pointer-events: none;
-  content: "Strict";
-  color: black;
-  background-color: transparent;
-  top: 35px;
-  left: -12px;
-}
+	position: absolute;
+	top: 35px;
+	left: -12px;
 
-#switch-mechanism {
-  position: relative;
-  display: block;
-  float: left;
-  background: linear-gradient(to right, rgb(255,255,255) 20%, rgb(106, 93, 226) 20%, rgb(106, 93, 226) 80%, rgb(255,255,255) 80%);
-  height: 20px;
-  width: 60px;
-  border: 2px solid black;
+	background-color: transparent;
+	color: black;
+	content: 'Strict';
+	pointer-events: none;
+}
+*/
+
+#switch-container {
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+	align-content: space-around;
 }
 
 #switch-container span {
-  position: relative;
-  display: block;
-  float: left;
+	margin: 5px;
+}
+
+#switch-mechanism {
+	display: block;
+	height: 20px;
+	width: 60px;
+	border: 2px solid black;
+
+	background: linear-gradient(to right, rgb(255,255,255) 20%, rgb(106, 93, 226) 20%, rgb(106, 93, 226) 80%, rgb(255,255,255) 80%);
 }
 
 /* === Interactive CSS === */
 #top-left:hover {
- background-color: rgb(0, 100, 0);
+	background-color: rgb(0, 100, 0);
 }
 #top-right:hover {
-  background-color: rgb(200,0,0);
+	background-color: rgb(200,0,0);
 }
 #bottom-left:hover {
-  background-color: rgb(177, 177, 0);
+	background-color: rgb(177, 177, 0);
 }
 #bottom-right:hover {
-  background-color: rgb(0, 0, 207);
+	background-color: rgb(0, 0, 207);
 }
 #count:hover {
-  background-color: pink;
+	background-color: pink;
 }
