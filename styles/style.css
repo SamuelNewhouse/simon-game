@@ -26,7 +26,7 @@ body {
   display: inline-block; /* Prevent collapse on resizing too small */
   height: 300px;
   width: 300px;
-  border: solid 20px #333333;  
+  border: solid 20px #333333;
 }
 
 #top-left {
@@ -36,9 +36,9 @@ body {
 
 #top-left::after {
   position: absolute;
-  content: "";  
+  content: "";
   height: 150px;
-  width: 150px;  
+  width: 150px;
   top: 170px; /* Move into border for true cicle. */
   left: 170px; /* Move into border for true cicle. */
   background-color: #333333;
@@ -52,9 +52,9 @@ body {
 
 #top-right::after {
   position: absolute;
-  content: "";  
+  content: "";
   height: 150px;
-  width: 150px;  
+  width: 150px;
   top: 170px; /* Move into border for true cicle. */
   left: -20px; /* Move into border for true cicle. */
   background-color: #333333;
@@ -68,9 +68,9 @@ body {
 
 #bottom-left::after {
   position: absolute;
-  content: "";  
+  content: "";
   height: 150px;
-  width: 150px;  
+  width: 150px;
   top: -20px; /* Move into border for true cicle. */
   left: 170px; /* Move into border for true cicle. */
   background-color: #333333;
@@ -84,9 +84,9 @@ body {
 
 #bottom-right::after {
   position: absolute;
-  content: "";  
+  content: "";
   height: 150px;
-  width: 150px;  
+  width: 150px;
   top: -20px; /* Move into border for true cicle. */
   left: -20px; /* Move into border for true cicle. */
   background-color: #333333;
@@ -100,23 +100,15 @@ body {
   left: 200px;
   width: 0px;
   height: 0px;
-  border: 140px solid white;
-  border-radius: 100%;  
+  border: 140px solid white; /* Use border to prevent box from overlapping buttons. */
+  border-radius: 100%;
 }
 
-#center {  
-  position: absolute;
-  display: inline-block; /* Used to center divs */
+#center {
+  position: absolute;  
   top: 290px;
   left: 220px;
-  width: auto;
-  height: auto;
   font-size: 32px;
-}
-
-#center > div:not(.clearfix) {  
-  display: inline-block; /* Keep in line unless clearfix*/
-  z-index: 100;
 }
 
 #count {
@@ -130,10 +122,10 @@ body {
   width: 40px;
 }
 
-#count::after {  
+#count::after {
   position: absolute;
-  pointer-events: none;  
-  content: "Count";  
+  pointer-events: none;
+  content: "Count";
   color: black;
   background-color: transparent;
   top: 35px;
@@ -144,23 +136,77 @@ body {
   position: absolute;
   content: "";
   background-color: rgb(35, 117, 66);
-  color: black;
   top: 15px;
-  left: 80px;
+  left: 100px;
   height: 40px;
   width: 40px;
   border: 2px solid black;
   border-radius: 100%;
 }
 
-#start::after {  
+#start::after {
   position: absolute;
-  pointer-events: none;  
-  content: "Start";  
+  pointer-events: none;
+  content: "Start";
   color: black;
   background-color: transparent;
   top: 35px;
   left: -12px;
+}
+
+#strict {
+  position: absolute;
+  content: "";
+  background-color: rgb(143, 135, 32);
+  top: 15px;
+  left: 180px;
+  height: 40px;
+  width: 40px;
+  border: 2px solid black;
+  border-radius: 100%;
+}
+
+#strict::after {
+  position: absolute;
+  pointer-events: none;
+  content: "Strict";
+  color: black;
+  background-color: transparent;
+  top: 35px;
+  left: -12px;
+}
+
+#switch {
+  position: absolute;
+  content: "";
+  background-color: rgb(32, 99, 143);
+  top: 110px;
+  left: 95px;
+  height: 10px;
+  width: 40px;
+  border: 2px solid black;
+  z-index: 10;
+}
+
+#switch::before {
+  position: absolute;
+  pointer-events: none;
+  content: "Off ---- On";
+  color: black;
+  background-color: transparent;
+  top: -16px;
+  left: -55px;
+  z-index: 0;
+}
+
+#switch::after {
+  position: absolute;
+  pointer-events: none;
+  content: "";
+  color: black;
+  background-color: transparent;
+  top: -10px;
+  left: 45px;
 }
 
 
