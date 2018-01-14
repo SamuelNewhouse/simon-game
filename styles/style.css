@@ -251,7 +251,7 @@ body {
 	width: 0;
 	top: -140px;
 	left: -140px;
-	border: 140px solid white; /* Use border to prevent box from overlapping buttons. */
+	border: 140px solid rgb(250, 230, 255); /* Use border to prevent box from overlapping buttons. */
 	border-radius: 100%;
 
 	content: '';
@@ -281,7 +281,7 @@ body {
 #display {
   width: 40px;
   height: 40px;
-	border: 1px solid black;
+	border: 2px inset rgb(100, 100, 100);
 	border-radius: 15%;
 
 	background-color: rgb(129, 66, 66);
@@ -289,12 +289,15 @@ body {
 	pointer-events: none;
 }
 
+#display.on {
+  background-color: rgb(201, 89, 89);
+}
+
 button {
   width: 40px;
   height: 40px;
-  border: 1px solid black;
+  border: 2px outset rgb(100, 100, 100);
 	border-radius: 50%;
-
 	background-color: rgb(226, 160, 160);
 }
 
@@ -310,9 +313,25 @@ button {
 	margin: 10px;
 }
 
+#start button{
+  background: radial-gradient(farthest-corner at 45% 45%, rgb(0, 105, 0) 30%, rgb(61, 61, 61));
+}
+
+#start button.on{
+  background: radial-gradient(farthest-corner at 45% 45%, rgb(0, 180, 0) 30%, rgb(61, 61, 61));
+}
+
 #strict {
   flex-direction: column;
 	margin: 10px;
+}
+
+#strict button{
+  background: radial-gradient(farthest-corner at 45% 45%, rgb(105, 105, 0) 30%, rgb(61, 61, 61));
+}
+
+#strict button.on{
+  background: radial-gradient(farthest-corner at 45% 45%, rgb(190, 190, 0) 30%, rgb(61, 61, 61));
 }
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -340,11 +359,9 @@ button {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgb(187, 187, 187);
-  -webkit-transition: .4s;
-  transition: .4s;  
+  background-color: rgb(66, 57, 57);
   border-radius: 15%;
-  border: 1px inset rgb(168, 168, 168);
+  border: 1px inset rgb(51, 35, 35);
 }
 
 .slider:before {
@@ -354,9 +371,9 @@ button {
   width: 26px;
   left: 3px;
   bottom: 3px;
-  background-color: rgb(66, 66, 66);
+  background-color: rgb(158, 146, 106);
   border-radius: 25%;
-  border: 1px outset rgb(163, 163, 163);
+  border: 1px outset rgb(196, 190, 160);
   -webkit-transition: .4s;
   transition: .4s;
 }
