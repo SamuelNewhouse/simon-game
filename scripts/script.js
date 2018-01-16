@@ -9,17 +9,22 @@ $(function () {
   var gameCount = 0;
   var playerCount = 0;
 
+  // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+  // Off/On functions
+  // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
   function turnOff() {
+    $("button, #display").removeClass("on");
+
+    startOff();
+    strictOff();
+
     isOn = false;
-    isStarted = false;
-    isStrict = false;
     isGameDoingPattern = false;
     isPlayerDoingPattern = false;
-    $("button, #display").removeClass("on");
   }
 
   function turnOn() {
-    isOn = true;    
+    isOn = true;
     $("button, #display").addClass("on");
   }
 
@@ -31,13 +36,53 @@ $(function () {
 
     isOn = $("input").is(":checked");
   }
-  function handleStart() {
-    console.log("Start.");
-  }
-  function handleStrict() {
-    console.log("Strict.");
+
+  // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+  // Start functions
+  // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+  function startOff() {
+    $("#start button").removeClass("selected");
+    isStarted = false;
   }
 
+  function startOn() {
+    $("#start button").addClass("selected");
+    isStarted = true;
+    // TODO: call function to start displaying moves.
+  }
+
+  function handleStart() {
+    if (!isOn || isStarted)
+      return;
+    else
+      startOn();
+  }
+
+  // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+  // Strict functions
+  // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+  function strictOff() {
+    $("#strict button").removeClass("selected");
+    isStrict = false;
+  }
+
+  function strictOn() {
+    $("#strict button").addClass("selected");
+    isStrict = true;
+  }
+
+  function handleStrict(val) {
+    if (!isOn || isStarted)
+      return;
+    else if (isStrict)
+      strictOff();
+    else
+      strictOn();
+  }
+
+  // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+  // Event Handlers
+  // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *  
   $("input").on("click", handleOnOff);
   $("#start button").on("click", handleStart);
   $("#strict button").on("click", handleStrict);
