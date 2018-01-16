@@ -1,5 +1,6 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /*! normalize.css v7.0.0 | MIT License | github.com/necolas/normalize.css    */
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 html {
 	line-height: 1.15;
 	-webkit-text-size-adjust: 100%;
@@ -167,7 +168,7 @@ template {
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Matters of convenience                                                    */
-
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 html {
 	box-sizing: border-box;
 }
@@ -189,7 +190,7 @@ body {
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Main content                                                              */
-
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 #full-game {
 	display: inline-block; /* Used to center divs */
 	position: relative;
@@ -198,6 +199,9 @@ body {
 	font-size: 0; /* Remove spaces around inline-blocks */
 }
 
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+/* Gameplay buttons                                                          */
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 .game-button {
 	display: inline-block; /* Prevent collapse on resizing too small */
 	position: relative;
@@ -226,6 +230,9 @@ body {
 	border-bottom-right-radius: 100%;
 }
 
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+/* Central circles                                                           */
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 #circle {
 	position: absolute;
 	height: 0;
@@ -244,17 +251,23 @@ body {
 	width: 0;
 	top: -140px;
 	left: -140px;
-	border: 140px solid white; /* Use border to prevent box from overlapping buttons. */
+	border: 140px solid rgb(250, 230, 255); /* Use border to prevent box from overlapping buttons. */
 	border-radius: 100%;
 
 	content: '';
 }
 
-#center {
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+/* Display and settings area                                                 */
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+.flex-container {
 	display: flex;
 	justify-content: space-around;
 	align-items: center;
 	align-content: space-around;
+}
+
+#center {
 	flex-flow: row wrap;
 	position: absolute;
 	height: 170px;
@@ -265,80 +278,121 @@ body {
 	font-size: 32px;
 }
 
-#count {
-	float: left;
-	margin: 10px;
-	position: relative;
+#display {
+	height: 40px;
+	width: 40px;
+	border: 2px inset rgb(100, 100, 100);
+	border-radius: 15%;
+
+	background-color: rgb(129, 66, 66);
+	color: black;
+	pointer-events: none;
 }
 
-/*
-#count::after {
-	position: absolute;
-	top: -30px;
-	left: 30px;
+#display.on {
+	background-color: rgb(201, 89, 89);
+}
 
-	background-color: rgb(117, 35, 35);
-	color: black;
-	content: '--';
+button {
+	height: 40px;
+	width: 40px;
+	border: 2px outset rgb(100, 100, 100);
+	border-radius: 50%;
+
+	background-color: rgb(226, 160, 160);
+}
+
+#count {
+	flex-direction: column;
+	margin: 10px;
+
 	pointer-events: none;
-}*/
+}
 
 #start {
-	float: left;
+	flex-direction: column;
 	margin: 10px;
-	position: relative;
 }
-/*
-#start::after {
-	position: absolute;
-	top: 35px;
-  left: -12px;
-  border: 2px solid black;
-	border-radius: 100%;
 
-	background-color: rgb(35, 117, 66);
-	color: black;
-	pointer-events: none;
+#start button {
+	background: radial-gradient(farthest-corner at 45% 45%, rgb(0, 105, 0) 30%, rgb(61, 61, 61));
 }
-*/
+
+#start button.on {
+	background: radial-gradient(farthest-corner at 45% 45%, rgb(0, 180, 0) 30%, rgb(61, 61, 61));
+}
+
+#start button.on.selected {
+	background: radial-gradient(farthest-corner at 45% 45%, rgb(0, 255, 0) 30%, rgb(61, 61, 61));
+}
 
 #strict {
-	float: left;
+	flex-direction: column;
 	margin: 10px;
-	position: relative;
 }
 
-/*
-#strict::after {
-	position: absolute;
-	top: 35px;
-	left: -12px;
-
-	background-color: transparent;
-	color: black;
-	content: 'Strict';
-	pointer-events: none;
-}
-*/
-
-#switch-container {
-	display: flex;
-	justify-content: space-around;
-	align-items: center;
-	align-content: space-around;
+#strict button {
+	background: radial-gradient(farthest-corner at 45% 45%, rgb(105, 105, 0) 30%, rgb(61, 61, 61));
 }
 
-#switch-container span {
+#strict button.on {
+	background: radial-gradient(farthest-corner at 45% 45%, rgb(190, 190, 0) 30%, rgb(61, 61, 61));
+}
+
+#strict button.on.selected {
+	background: radial-gradient(farthest-corner at 45% 45%, rgb(255, 255, 0) 30%, rgb(61, 61, 61));
+}
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+/* On/Off switch                                                             */
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+#switch div , label {
 	margin: 5px;
 }
 
-#switch-mechanism {
-	display: block;
-	height: 20px;
+.switch-mechanism {
+	display: inline-block;
+	position: relative;
+	height: 34px;
 	width: 60px;
-	border: 2px solid black;
+}
 
-	background: linear-gradient(to right, rgb(255,255,255) 20%, rgb(106, 93, 226) 20%, rgb(106, 93, 226) 80%, rgb(255,255,255) 80%);
+.switch-mechanism input {
+	display: none;
+}
+
+.slider {
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	border: 1px inset rgb(51, 35, 35);
+	border-radius: 15%;
+
+	background-color: rgb(66, 57, 57);
+	cursor: pointer;
+}
+
+.slider:before {
+	position: absolute;
+	height: 26px;
+	width: 26px;
+	left: 3px;
+	bottom: 3px;
+	border: 1px outset rgb(196, 190, 160);
+	border-radius: 25%;
+
+	background-color: rgb(158, 146, 106);
+	content: '';
+	-webkit-transition: .4s;
+	        transition: .4s;
+}
+
+input:checked + .slider:before {
+	-webkit-transform: translateX(26px);
+	    -ms-transform: translateX(26px);
+	        transform: translateX(26px);
 }
 
 /* === Interactive CSS === */
