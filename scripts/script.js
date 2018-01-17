@@ -8,24 +8,31 @@ $(function () {
   var isGameShowingPattern = false;
   var isPlayerTryingPattern = false;
 
-  var pattern = [0, 1, 2, 3, 0];
+  var pattern = [];
   var patternInterval = null; // setInterval function
 
   const winCount = 10;
   var showCount = 0;
   var playerCount = 0;
 
+  var playButtonMap = {
+    "top-left": 0,
+    "top-right": 1,
+    "bottom-right": 2,
+    "bottom-left": 3
+  }
+
   // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-  // Off/On functions
+  // Off/on functions
   // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
   function turnOff() {
-    $("button, #display").removeClass("on");
     stopPattern();
+    stopPlayerTry();
     strictOff();
     startOff();
 
+    $("button, #display").removeClass("on");
     isOn = false;
-    isPlayerTryingPattern = false;
   }
 
   function turnOn() {
@@ -53,7 +60,7 @@ $(function () {
   function startOn() {
     $("#start button").addClass("selected");
     isStarted = true;
-    // TODO: call function to start displaying moves.
+
     startPattern();
   }
 
@@ -89,7 +96,7 @@ $(function () {
   // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
   // Pattern functions
   // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-  function clearLights() {
+  function clearPlayLights() {
     $(".game-button").removeClass("show");
   }
 
@@ -99,14 +106,14 @@ $(function () {
   }
 
   function showPattern() {
-    if (showCount >= pattern.length){
+    if (showCount >= pattern.length) {
       stopPattern();
       return;
     }
 
     console.log(pattern[showCount]);
 
-    clearLights();
+    clearPlayLights();
 
     switch (pattern[showCount]) {
       case 0:
@@ -126,6 +133,14 @@ $(function () {
     showCount++;
   }
 
+  function stopPattern() {
+    clearInterval(patternInterval);
+    clearPlayLights();
+    isGameShowingPattern = false;
+
+    startPlayerTry(); // Assume player should now try entering pattern.
+  }
+
   function startPattern() {
     extendPattern();
     showCount = 0;
@@ -133,17 +148,39 @@ $(function () {
     patternInterval = setInterval(showPattern, 1000);
   }
 
-  function stopPattern() {
-    clearInterval(patternInterval);
-    clearLights();
-    isGameShowingPattern = false;
-  }
-
   // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
   // Player pattern entry
-  // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *  
-  function handlePatternEntry() {
+  // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+  function stopPlayerTry() {
+    console.log("Enter stopPlayerTry()")
+    isPlayerTryingPattern = false;
+  }
 
+  function startPlayerTry() {
+    isPlayerTryingPattern = true;
+    playerCount = 0;
+  }
+
+  function handlePlayerTry() {
+    console.log("Enter handlePlayerTry()");
+    if (!isPlayerTryingPattern)
+      return;
+
+    var playerEntry = playButtonMap[this.id];
+
+    if (playerEntry === pattern[playerCount])
+      console.log("correct");
+    else
+      console.log("incorrect");
+
+    playerCount++;
+
+    if (playerCount >= pattern.length) {
+      console.log("playerCount >= pattern.length");
+      stopPlayerTry();
+      startPattern();
+      return;
+    }
   }
 
   // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -152,5 +189,5 @@ $(function () {
   $("input").on("click", handleOnOff);
   $("#start button").on("click", handleStart);
   $("#strict button").on("click", handleStrict);
-  $(".game-button").on("click", handlePatternEntry);
+  $(".game-button").on("click", handlePlayerTry);
 });
