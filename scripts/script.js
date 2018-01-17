@@ -18,12 +18,7 @@ $(function () {
 
   const winCount = 10;
 
-  const playButtonMap = {
-    "top-left": 0,
-    "top-right": 1,
-    "bottom-right": 2,
-    "bottom-left": 3
-  }
+  const playButtonMap = ["top-left", "top-right", "bottom-right", "bottom-left"];
 
   const patternPace = 1000; // ms between each pattern display
   const lightDuration = 700; /* pattern lights are not lit the entire pace
@@ -121,9 +116,17 @@ $(function () {
   // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
   // Pattern functions
   // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+  function lightGameButton(value) {
+    $("#" + value).addClass("show");    
+    var numValue = playButtonMap.findIndex( (v) => {return v === value;} );
+    console.log(numValue);
+    var audio = $("audio")[numValue];
+    audio.play();
+  }  
+
   function extendPattern() {
     var nextButton = Math.floor(Math.random() * 4); // 0-3
-    pattern.push(nextButton);
+    pattern.push(playButtonMap[nextButton]);
   }
 
   function showPattern() {
@@ -132,20 +135,7 @@ $(function () {
       return;
     }
 
-    switch (pattern[showPatternCount]) {
-      case 0:
-        $("#top-left").addClass("show");
-        break;
-      case 1:
-        $("#top-right").addClass("show");
-        break;
-      case 2:
-        $("#bottom-right").addClass("show");
-        break;
-      case 3:
-        $("#bottom-left").addClass("show");
-        break;
-    }
+    lightGameButton(pattern[showPatternCount]);
 
     showPatternCount++;
     // Clear light before next light starts.
@@ -190,7 +180,7 @@ $(function () {
     if (!isPlayerTryingPattern)
       return;
     playButtonFocus = this.id;
-    $("#" + playButtonFocus).addClass("show");
+    lightGameButton(playButtonFocus);
   }
 
   function handlePlayerTry() { // When mouse goes up or leaves button
@@ -200,7 +190,7 @@ $(function () {
     playButtonFocus = null;
     clearPlayLights();
 
-    var playerEntry = playButtonMap[this.id];
+    var playerEntry = this.id;
 
     if (playerEntry !== pattern[playerEntryCount]) {
       if (isStrict)
