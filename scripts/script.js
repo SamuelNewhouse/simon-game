@@ -8,28 +8,53 @@ $(function () {
   var isGameShowingPattern = false;
   var isPlayerTryingPattern = false;
 
+  var playButtonFocus = null; // Tracks beginning and end of game button press.
+
   var pattern = [];
-  var patternInterval = null; // setInterval function
+  var patternInterval = null; // setInterval function  
+
+  var showPatternCount = 0;
+  var playerEntryCount = 0;
 
   const winCount = 10;
-  var showCount = 0;
-  var playerCount = 0;
 
-  var playButtonMap = {
+  const playButtonMap = {
     "top-left": 0,
     "top-right": 1,
     "bottom-right": 2,
     "bottom-left": 3
   }
 
+  const patternPace = 1000; // ms between each pattern display
+  const lightDuration = 700; /* pattern lights are not lit the entire pace
+  duration to make clear when the same light is lit multiple times */
+
+
+  // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+  // Clear and reset functions
+  // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+  function clearPlayLights() {
+    $(".game-button").removeClass("show");
+  }
+
+  function clearPattern() {
+    pattern = [];
+    updateCountDisplay();
+  }
+
+  function reset() {    
+    stopPattern();   // call order is important
+    stopPlayerTry(); // stopPattern() calls startPlayerTry() so stop it here
+    startOff();
+    clearPattern(); // call last to make sure Count updates properly.
+  }
+
   // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
   // Off/on functions
   // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
   function turnOff() {
-    stopPattern();
-    stopPlayerTry();
+    reset();
     strictOff();
-    startOff();
 
     $("button, #display").removeClass("on");
     isOn = false;
@@ -96,26 +121,18 @@ $(function () {
   // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
   // Pattern functions
   // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-  function clearPlayLights() {
-    $(".game-button").removeClass("show");
-  }
-
   function extendPattern() {
     var nextButton = Math.floor(Math.random() * 4); // 0-3
     pattern.push(nextButton);
   }
 
   function showPattern() {
-    if (showCount >= pattern.length) {
+    if (showPatternCount >= pattern.length) {
       stopPattern();
       return;
     }
 
-    console.log(pattern[showCount]);
-
-    clearPlayLights();
-
-    switch (pattern[showCount]) {
+    switch (pattern[showPatternCount]) {
       case 0:
         $("#top-left").addClass("show");
         break;
@@ -130,7 +147,9 @@ $(function () {
         break;
     }
 
-    showCount++;
+    showPatternCount++;
+    // Clear light before next light starts.
+    setTimeout(clearPlayLights, lightDuration);
   }
 
   function stopPattern() {
@@ -141,53 +160,87 @@ $(function () {
     startPlayerTry(); // Assume player should now try entering pattern.
   }
 
-  function startPattern() {
-    extendPattern();
-    showCount = 0;
+  function startPattern(doExtend) {
+    doExtend = (typeof doExtend === "boolean") ? doExtend : true;
+
+    if (doExtend) {
+      // Displayed count is pattern length before extending.
+      updateCountDisplay();
+      extendPattern();
+    }
+
+    showPatternCount = 0;
     isGameShowingPattern = true;
-    patternInterval = setInterval(showPattern, 1000);
+    patternInterval = setInterval(showPattern, patternPace);
   }
 
   // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-  // Player pattern entry
+  // Player pattern entry functions
   // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
   function stopPlayerTry() {
-    console.log("Enter stopPlayerTry()")
     isPlayerTryingPattern = false;
   }
 
   function startPlayerTry() {
     isPlayerTryingPattern = true;
-    playerCount = 0;
+    playerEntryCount = 0;
   }
 
-  function handlePlayerTry() {
-    console.log("Enter handlePlayerTry()");
+  function prePlayerTry() { // While mouse is down
     if (!isPlayerTryingPattern)
       return;
+    playButtonFocus = this.id;
+    $("#" + playButtonFocus).addClass("show");
+  }
+
+  function handlePlayerTry() { // When mouse goes up or leaves button
+    if (!isPlayerTryingPattern || (playButtonFocus !== this.id))
+      return;
+
+    playButtonFocus = null;
+    clearPlayLights();
 
     var playerEntry = playButtonMap[this.id];
 
-    if (playerEntry === pattern[playerCount])
-      console.log("correct");
-    else
-      console.log("incorrect");
-
-    playerCount++;
-
-    if (playerCount >= pattern.length) {
-      console.log("playerCount >= pattern.length");
-      stopPlayerTry();
-      startPattern();
+    if (playerEntry !== pattern[playerEntryCount]) {
+      if (isStrict)
+        reset();
+      else {
+        stopPlayerTry();
+        startPattern(false);
+      }
       return;
     }
+
+    playerEntryCount++;
+
+    if (playerEntryCount >= pattern.length) {
+      stopPlayerTry();
+      startPattern();
+    }
+  }
+
+  // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+  // Count display function
+  // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *  
+  function updateCountDisplay() {
+    if (!isOn || !isStarted)
+      $("#display").html("--");
+    else
+      $("#display").html(pattern.length);
   }
 
   // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
   // Event Handlers
   // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *  
-  $("input").on("click", handleOnOff);
-  $("#start button").on("click", handleStart);
-  $("#strict button").on("click", handleStrict);
-  $(".game-button").on("click", handlePlayerTry);
+  $("input").click(handleOnOff);
+  $("#start button").click(handleStart);
+  $("#strict button").click(handleStrict);
+  $(".game-button").mousedown(prePlayerTry);
+  $(".game-button").mouseup(handlePlayerTry);
+  $(".game-button").mouseleave(handlePlayerTry);
+
+  // Backup drag and select stopping
+  $("*").on("dragstart", () => false);
+  $("*").on("selectstart", () => false);
 });
