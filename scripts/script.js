@@ -8,10 +8,12 @@ $(function () {
   var isGameShowingPattern = false;
   var isPlayerTryingPattern = false;
 
-  var playButtonFocus = null; // Tracks beginning and end of game button press.
+  var playButtonFocus = null; // Tracks beginning and end of game button press
 
   var pattern = [];
-  var patternInterval = null; // setInterval function  
+  var patternInterval = null; // setInterval function for pattern display
+  var dimTimeout = null; // setTimeout function for dimming light and sound
+  var curAudio = null; // last audio element playing
 
   var showPatternCount = 0;
   var playerEntryCount = 0;
@@ -19,16 +21,29 @@ $(function () {
   const winCount = 10;
 
   const playButtonMap = ["top-left", "top-right", "bottom-right", "bottom-left"];
+  const audioMap = ["sound1", "sound2", "sound3", "sound4"];
 
   const patternPace = 1000; // ms between each pattern display
   const lightDuration = 700; /* pattern lights are not lit the entire pace
   duration to make clear when the same light is lit multiple times */
 
+  function playSound(audioID) {
+    var sound = document.getElementById(audioID);
+    sound.play();
+  }
+
+  function stopSound(audioID) {
+    var sound = document.getElementById(audioID);
+    sound.pause();
+    sound.currentTime = 0;
+  }
 
   // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
   // Clear and reset functions
   // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
   function clearPlayLights() {
+    clearTimeout(dimTimeout);
+    stopSound(curAudio);    
     $(".game-button").removeClass("show");
   }
 
@@ -37,7 +52,7 @@ $(function () {
     updateCountDisplay();
   }
 
-  function reset() {    
+  function reset() {
     stopPattern();   // call order is important
     stopPlayerTry(); // stopPattern() calls startPlayerTry() so stop it here
     startOff();
@@ -117,12 +132,11 @@ $(function () {
   // Pattern functions
   // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
   function lightGameButton(value) {
-    $("#" + value).addClass("show");    
-    var numValue = playButtonMap.findIndex( (v) => {return v === value;} );
-    console.log(numValue);
-    var audio = $("audio")[numValue];
-    audio.play();
-  }  
+    $("#" + value).addClass("show");
+    var numValue = playButtonMap.findIndex((v) => { return v === value; });
+    curAudio = audioMap[numValue];
+    playSound(curAudio);
+  }
 
   function extendPattern() {
     var nextButton = Math.floor(Math.random() * 4); // 0-3
@@ -139,7 +153,7 @@ $(function () {
 
     showPatternCount++;
     // Clear light before next light starts.
-    setTimeout(clearPlayLights, lightDuration);
+    dimTimeout = setTimeout(clearPlayLights, lightDuration);
   }
 
   function stopPattern() {
