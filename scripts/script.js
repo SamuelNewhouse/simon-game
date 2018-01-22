@@ -6,6 +6,7 @@ $(function () {
   var isStarted = false;
   var isStrict = false;
   var isGameShowingPattern = false;
+  var isGameShowingWinOrLoss = false;
   var isPlayerTryingPattern = false;
 
   var playButtonFocus = null; // Tracks beginning and end of game button press
@@ -20,33 +21,48 @@ $(function () {
 
   const winCount = 10;
 
-  const playButtonMap = ["top-left", "top-right", "bottom-right", "bottom-left"];
-  const audioMap = ["sound1", "sound2", "sound3", "sound4"];
+  // HTML element IDs mapped from 0 to 3.
+  const gameButtonIDMap = ["top-left", "top-right", "bottom-right", "bottom-left"];
+  const audioIDMap = ["sound1", "sound2", "sound3", "sound4"];
 
   const patternPace = 1000; // ms between each pattern display
   const lightDuration = 700; /* pattern lights are not lit the entire pace
   duration to make clear when the same light is lit multiple times */
 
-  function playSound(audioID) {
-    var sound = document.getElementById(audioID);
-    sound.play();
-  }
-
+  // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+  // Game button audio functions
+  // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
   function stopSound(audioID) {
     var sound = document.getElementById(audioID);
     sound.pause();
     sound.currentTime = 0;
   }
 
+  function playSound(audioID) {
+    var sound = document.getElementById(audioID);
+    sound.currentTime = 0;
+    sound.play();
+  }
+
   // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-  // Clear and reset functions
+  // Game button lighting functions
   // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
   function clearPlayLights() {
     clearTimeout(dimTimeout);
-    stopSound(curAudio);    
+    stopSound(curAudio);
     $(".game-button").removeClass("show");
   }
 
+  function lightGameButton(value) {
+    var numValue = gameButtonIDMap.findIndex((v) => { return v === value; });
+    curAudio = audioIDMap[numValue];
+    playSound(curAudio);
+    $("#" + value).addClass("show");
+  }
+
+  // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+  // Clear and reset functions
+  // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
   function clearPattern() {
     pattern = [];
     updateCountDisplay();
@@ -59,15 +75,22 @@ $(function () {
     clearPattern(); // call last to make sure Count updates properly.
   }
 
+  function showDefeat() {
+
+  }
+
+  function showVictory() {
+
+  }
+  
   // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
   // Off/on functions
   // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
   function turnOff() {
     reset();
     strictOff();
-
-    $("button, #display").removeClass("on");
     isOn = false;
+    $("button, #display").removeClass("on");
   }
 
   function turnOn() {
@@ -129,18 +152,11 @@ $(function () {
   }
 
   // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-  // Pattern functions
+  // Pattern display functions
   // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-  function lightGameButton(value) {
-    $("#" + value).addClass("show");
-    var numValue = playButtonMap.findIndex((v) => { return v === value; });
-    curAudio = audioMap[numValue];
-    playSound(curAudio);
-  }
-
   function extendPattern() {
     var nextButton = Math.floor(Math.random() * 4); // 0-3
-    pattern.push(playButtonMap[nextButton]);
+    pattern.push(gameButtonIDMap[nextButton]);
   }
 
   function showPattern() {
@@ -164,12 +180,10 @@ $(function () {
     startPlayerTry(); // Assume player should now try entering pattern.
   }
 
-  function startPattern(doExtend) {
-    doExtend = (typeof doExtend === "boolean") ? doExtend : true;
+  function startPattern(isExtending) {
+    isExtending = (typeof isExtending === "boolean") ? isExtending : true;
 
-    if (doExtend) {
-      // Displayed count is pattern length before extending.
-      updateCountDisplay();
+    if (isExtending) {
       extendPattern();
     }
 
@@ -207,8 +221,10 @@ $(function () {
     var playerEntry = this.id;
 
     if (playerEntry !== pattern[playerEntryCount]) {
-      if (isStrict)
+      if (isStrict) {        
         reset();
+        showDefeat();
+      }
       else {
         stopPlayerTry();
         startPattern(false);
@@ -218,8 +234,13 @@ $(function () {
 
     playerEntryCount++;
 
-    if (playerEntryCount >= pattern.length) {
+    if (playerEntryCount >= winCount) {
+      stopPlayerTry();      
+      showVictory();
+    }
+    else if (playerEntryCount >= pattern.length) {
       stopPlayerTry();
+      updateCountDisplay();
       startPattern();
     }
   }
