@@ -19,7 +19,7 @@ $(function () {
   var showPatternCount = 0;
   var playerEntryCount = 0;
 
-  const winCount = 10;
+  const winCount = 20;
 
   // HTML element IDs mapped from 0 to 3.
   const gameButtonIDMap = ["top-left", "top-right", "bottom-right", "bottom-left"];
@@ -33,14 +33,20 @@ $(function () {
   // Game button audio functions
   // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
   function stopSound(audioID) {
+    if (typeof audioID !== "string")
+      return;
     var sound = document.getElementById(audioID);
-    sound.pause();
-    sound.currentTime = 0;
+    sound.volume = 0;
+    //sound.pause();
+    //sound.currentTime = 0;
   }
 
   function playSound(audioID) {
+    if (typeof audioID !== "string")
+      return;
     var sound = document.getElementById(audioID);
     sound.currentTime = 0;
+    sound.volume = 1;
     sound.play();
   }
 
@@ -58,6 +64,7 @@ $(function () {
     curAudio = audioIDMap[numValue];
     playSound(curAudio);
     $("#" + value).addClass("show");
+    console.log("light");
   }
 
   // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -75,14 +82,73 @@ $(function () {
     clearPattern(); // call last to make sure Count updates properly.
   }
 
+  // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+  // Defeat section
+  // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+  const defeatPace = 500; // ms between flashes on defeat screen
+  var defeatInterval = null;
+  var defeatTimeout = null;
+
+  function stopDefeat() {
+    clearInterval(defeatInterval);
+    clearTimeout(defeatTimeout);
+    reset();
+  }
+
+  function defeatStep1() {
+    $(".game-button").addClass("show");
+    $("#display").html("X");
+    defeatTimeout = setTimeout(defeatStep2, defeatPace / 2);
+  }
+
+  function defeatStep2() {
+    $(".game-button").removeClass("show");
+    $("#display").html("");
+  }
+
   function showDefeat() {
-
+    defeatInterval = setInterval(defeatStep1, defeatPace);
+    setTimeout(stopDefeat, defeatPace * 3.5);
   }
 
-  function showVictory() {
+  // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+  // victory definition
+  // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+  victory = (function defineVictory() {
+    const victoryPace = 200;
+    const victoryLength = 2990;
+    var curButton = 0;
+    var victoryStepInterval = null;
+    var victoryEndTimeout = null;
 
-  }
-  
+    function step() {
+      if (curButton > 3)
+        curButton = 0;
+
+      clearPlayLights();
+      lightGameButton(gameButtonIDMap[curButton]);
+      curButton++;
+    }
+
+    function begin() {
+      updateCountDisplay();
+      victoryStepInterval = setInterval(step, victoryPace);
+      victoryEndTimeout = setTimeout(end, victoryLength);
+    }
+
+    function end() {
+      clearPlayLights();
+      clearInterval(victoryStepInterval);
+      clearTimeout(victoryEndTimeout);
+      reset();
+    }
+
+    return { // victory interface      
+      begin: begin,
+      end: end
+    };
+  })();
+
   // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
   // Off/on functions
   // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -221,7 +287,7 @@ $(function () {
     var playerEntry = this.id;
 
     if (playerEntry !== pattern[playerEntryCount]) {
-      if (isStrict) {        
+      if (isStrict) {
         reset();
         showDefeat();
       }
@@ -235,8 +301,8 @@ $(function () {
     playerEntryCount++;
 
     if (playerEntryCount >= winCount) {
-      stopPlayerTry();      
-      showVictory();
+      stopPlayerTry();
+      victory.begin();
     }
     else if (playerEntryCount >= pattern.length) {
       stopPlayerTry();
@@ -265,7 +331,7 @@ $(function () {
   $(".game-button").mouseup(handlePlayerTry);
   $(".game-button").mouseleave(handlePlayerTry);
 
-  // Backup drag and select stopping
+  // Backup for drag and select stopping
   $("*").on("dragstart", () => false);
   $("*").on("selectstart", () => false);
 });
