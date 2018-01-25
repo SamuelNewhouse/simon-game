@@ -30,6 +30,49 @@ $(function () {
   duration to make clear when the same light is lit multiple times */
 
   // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+  // gameButton definition
+  // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+  function GameButton(divId, audioId) {
+    this.divId = divId;
+    this.sound = document.getElementById(audioId);
+    this.dimTimeout = null;
+  };
+  GameButton.prototype = {
+    light: function light(length = lightDuration, isPlayingSound = true) {
+      $("#" + this.divId).addClass("show");
+
+      if (isPlayingSound)
+        this.playSound();
+
+      if (length > 0)
+        this.dimTimeout = setTimeout(this.dim, length);
+    },
+    dim: function dim() {
+      $("#" + this.divId).removeClass("show");
+      this.stopSound();
+
+      if (this.dimTimeout != null)
+        clearTimeout(this.dimTimeout)
+    },
+    playSound: function playSound() {
+      this.sound.currentTime = 0;
+      this.sound.volume = 1;
+      this.sound.play();
+    },
+    stopSound: function stopSound() {
+      this.sound.volume = 0;
+      this.sound.pause();
+      this.sound.currentTime = 0;
+    }
+  };
+  var gameButtons = [];
+  gameButtons[0] = new GameButton("top-left", "sound1");
+  gameButtons[1] = new GameButton("top-right", "sound2");
+  gameButtons[2] = new GameButton("bottom-right", "sound3");
+  gameButtons[3] = new GameButton("bottom-left", "sound4");
+  
+
+  // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
   // Game button audio functions
   // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
   function stopSound(audioID) {
@@ -64,7 +107,6 @@ $(function () {
     curAudio = audioIDMap[numValue];
     playSound(curAudio);
     $("#" + value).addClass("show");
-    console.log("light");
   }
 
   // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -114,12 +156,12 @@ $(function () {
   // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
   // victory definition
   // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-  victory = (function defineVictory() {
+  var victory = (function defineVictory() {
     const victoryPace = 200;
     const victoryLength = 2990;
     var curButton = 0;
-    var victoryStepInterval = null;
-    var victoryEndTimeout = null;
+    var intervalStep = null;
+    var timeoutEnd = null;
 
     function step() {
       if (curButton > 3)
@@ -132,14 +174,14 @@ $(function () {
 
     function begin() {
       updateCountDisplay();
-      victoryStepInterval = setInterval(step, victoryPace);
-      victoryEndTimeout = setTimeout(end, victoryLength);
+      intervalStep = setInterval(step, victoryPace);
+      timeoutEnd = setTimeout(end, victoryLength);
     }
 
     function end() {
       clearPlayLights();
-      clearInterval(victoryStepInterval);
-      clearTimeout(victoryEndTimeout);
+      clearInterval(intervalStep);
+      clearTimeout(timeoutEnd);
       reset();
     }
 
