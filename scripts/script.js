@@ -1,4 +1,4 @@
-$(function () {
+$(function main() {
   // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
   // Game state variables
   // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -13,17 +13,14 @@ $(function () {
 
   var pattern = [];
   var patternInterval = null; // setInterval function for pattern display
-  var dimTimeout = null; // setTimeout function for dimming light and sound
-  var curAudio = null; // last audio element playing
 
   var showPatternCount = 0;
   var playerEntryCount = 0;
 
-  const winCount = 20;
+  const winCount = 5;
 
   // HTML element IDs mapped from 0 to 3.
-  const gameButtonIDMap = ["top-left", "top-right", "bottom-right", "bottom-left"];
-  const audioIDMap = ["sound1", "sound2", "sound3", "sound4"];
+  const gameButtonIndexMap = { "top-left": 0, "top-right": 1, "bottom-right": 2, "bottom-left": 3 };
 
   const patternPace = 1000; // ms between each pattern display
   const lightDuration = 700; /* pattern lights are not lit the entire pace
@@ -37,22 +34,24 @@ $(function () {
     this.sound = document.getElementById(audioId);
     this.dimTimeout = null;
   };
-  GameButton.prototype = {
+  GameButton.prototype = {    
     light: function light(length = lightDuration, isPlayingSound = true) {
       $("#" + this.divId).addClass("show");
 
       if (isPlayingSound)
         this.playSound();
 
-      if (length > 0)
-        this.dimTimeout = setTimeout(this.dim, length);
+      if (length > 0) {
+        this.dimTimeout = setTimeout(this.dim.bind(this), length);
+      }
     },
     dim: function dim() {
       $("#" + this.divId).removeClass("show");
       this.stopSound();
 
+      // Could be called elsewhere before timeOut calls it.
       if (this.dimTimeout != null)
-        clearTimeout(this.dimTimeout)
+        clearTimeout(this.dimTimeout);
     },
     playSound: function playSound() {
       this.sound.currentTime = 0;
@@ -70,48 +69,15 @@ $(function () {
   gameButtons[1] = new GameButton("top-right", "sound2");
   gameButtons[2] = new GameButton("bottom-right", "sound3");
   gameButtons[3] = new GameButton("bottom-left", "sound4");
-  
-
-  // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-  // Game button audio functions
-  // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-  function stopSound(audioID) {
-    if (typeof audioID !== "string")
-      return;
-    var sound = document.getElementById(audioID);
-    sound.volume = 0;
-    //sound.pause();
-    //sound.currentTime = 0;
-  }
-
-  function playSound(audioID) {
-    if (typeof audioID !== "string")
-      return;
-    var sound = document.getElementById(audioID);
-    sound.currentTime = 0;
-    sound.volume = 1;
-    sound.play();
-  }
-
-  // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-  // Game button lighting functions
-  // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-  function clearPlayLights() {
-    clearTimeout(dimTimeout);
-    stopSound(curAudio);
-    $(".game-button").removeClass("show");
-  }
-
-  function lightGameButton(value) {
-    var numValue = gameButtonIDMap.findIndex((v) => { return v === value; });
-    curAudio = audioIDMap[numValue];
-    playSound(curAudio);
-    $("#" + value).addClass("show");
-  }
 
   // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
   // Clear and reset functions
   // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+  function clearGameButtons() {
+    for (let i of gameButtons)
+      i.dim();
+  }
+
   function clearPattern() {
     pattern = [];
     updateCountDisplay();
@@ -167,8 +133,9 @@ $(function () {
       if (curButton > 3)
         curButton = 0;
 
-      clearPlayLights();
-      lightGameButton(gameButtonIDMap[curButton]);
+      clearGameButtons();
+      gameButtons[curButton].light(victoryPace);
+      //lightGameButton(gameButtonIDMap[curButton]);
       curButton++;
     }
 
@@ -179,7 +146,7 @@ $(function () {
     }
 
     function end() {
-      clearPlayLights();
+      clearGameButtons();
       clearInterval(intervalStep);
       clearTimeout(timeoutEnd);
       reset();
@@ -264,7 +231,7 @@ $(function () {
   // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
   function extendPattern() {
     var nextButton = Math.floor(Math.random() * 4); // 0-3
-    pattern.push(gameButtonIDMap[nextButton]);
+    pattern.push(nextButton);
   }
 
   function showPattern() {
@@ -273,18 +240,15 @@ $(function () {
       return;
     }
 
-    lightGameButton(pattern[showPatternCount]);
-
+    var curButton = pattern[showPatternCount];
+    gameButtons[curButton].light();
     showPatternCount++;
-    // Clear light before next light starts.
-    dimTimeout = setTimeout(clearPlayLights, lightDuration);
   }
 
   function stopPattern() {
-    clearInterval(patternInterval);
-    clearPlayLights();
+    clearGameButtons();
     isGameShowingPattern = false;
-
+    clearInterval(patternInterval);
     startPlayerTry(); // Assume player should now try entering pattern.
   }
 
@@ -315,18 +279,24 @@ $(function () {
   function prePlayerTry() { // While mouse is down
     if (!isPlayerTryingPattern)
       return;
+
     playButtonFocus = this.id;
-    lightGameButton(playButtonFocus);
+
+    var curButton = gameButtonIndexMap[playButtonFocus];
+
+    gameButtons[curButton].light(0);
+
+    //lightGameButton(playButtonFocus);
   }
 
-  function handlePlayerTry() { // When mouse goes up or leaves button
+  function handlePlayerTry() { // When mouse goes up or leaves button    
     if (!isPlayerTryingPattern || (playButtonFocus !== this.id))
       return;
 
     playButtonFocus = null;
-    clearPlayLights();
+    clearGameButtons();
 
-    var playerEntry = this.id;
+    var playerEntry = gameButtonIndexMap[this.id];
 
     if (playerEntry !== pattern[playerEntryCount]) {
       if (isStrict) {
