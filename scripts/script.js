@@ -17,7 +17,7 @@ $(function main() {
   var showPatternCount = 0;
   var playerEntryCount = 0;
 
-  const winCount = 5;
+  const winCount = 2;
 
   // HTML element IDs mapped from 0 to 3.
   const gameButtonIndexMap = { "top-left": 0, "top-right": 1, "bottom-right": 2, "bottom-left": 3 };
@@ -34,7 +34,7 @@ $(function main() {
     this.sound = document.getElementById(audioId);
     this.dimTimeout = null;
   };
-  GameButton.prototype = {    
+  GameButton.prototype = {
     light: function light(length = lightDuration, isPlayingSound = true) {
       $("#" + this.divId).addClass("show");
 
@@ -50,8 +50,7 @@ $(function main() {
       this.stopSound();
 
       // Could be called elsewhere before timeOut calls it.
-      if (this.dimTimeout != null)
-        clearTimeout(this.dimTimeout);
+      clearTimeout(this.dimTimeout);
     },
     playSound: function playSound() {
       this.sound.currentTime = 0;
@@ -84,39 +83,12 @@ $(function main() {
   }
 
   function reset() {
+    victory.end();
+    defeat.end();
     stopPattern();   // call order is important
     stopPlayerTry(); // stopPattern() calls startPlayerTry() so stop it here
     startOff();
     clearPattern(); // call last to make sure Count updates properly.
-  }
-
-  // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-  // Defeat section
-  // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-  const defeatPace = 500; // ms between flashes on defeat screen
-  var defeatInterval = null;
-  var defeatTimeout = null;
-
-  function stopDefeat() {
-    clearInterval(defeatInterval);
-    clearTimeout(defeatTimeout);
-    reset();
-  }
-
-  function defeatStep1() {
-    $(".game-button").addClass("show");
-    $("#display").html("X");
-    defeatTimeout = setTimeout(defeatStep2, defeatPace / 2);
-  }
-
-  function defeatStep2() {
-    $(".game-button").removeClass("show");
-    $("#display").html("");
-  }
-
-  function showDefeat() {
-    defeatInterval = setInterval(defeatStep1, defeatPace);
-    setTimeout(stopDefeat, defeatPace * 3.5);
   }
 
   // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -135,7 +107,6 @@ $(function main() {
 
       clearGameButtons();
       gameButtons[curButton].light(victoryPace);
-      //lightGameButton(gameButtonIDMap[curButton]);
       curButton++;
     }
 
@@ -149,13 +120,54 @@ $(function main() {
       clearGameButtons();
       clearInterval(intervalStep);
       clearTimeout(timeoutEnd);
-      reset();
+      startOff();
+      updateCountDisplay();
     }
 
-    return { // victory interface      
+    return {
       begin: begin,
       end: end
     };
+  })();
+
+  // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+  // defeat definition
+  // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+  var defeat = (function defineDefeat() {
+    const flickerPace = 250;
+    const length = 2000;
+    var stepInterval = null;
+    var endTimeout = null;
+    var curStep = 0;
+
+    function step() {
+      if (curStep % 2 == 0) {
+        $(".game-button").addClass("show");
+        $("#display").html("X");
+      }
+      else {
+        $(".game-button").removeClass("show");
+        $("#display").html("");
+      }
+      curStep++;
+    }
+
+    function begin() {
+      curStep = 0;
+      stepInterval = setInterval(step, flickerPace);
+      endTimeout = setTimeout(end, length);
+    }
+
+    function end() {
+      clearInterval(stepInterval);
+      clearTimeout(endTimeout);
+      updateCountDisplay();
+    }
+
+    return {
+      begin: begin,
+      end: end
+    }
   })();
 
   // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -301,7 +313,7 @@ $(function main() {
     if (playerEntry !== pattern[playerEntryCount]) {
       if (isStrict) {
         reset();
-        showDefeat();
+        defeat.begin();
       }
       else {
         stopPlayerTry();
