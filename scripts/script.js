@@ -3,8 +3,6 @@ $(function main() {
   // Game state variables
   // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
   var isOn = false;
-  var isStarted = false;
-  var isStrict = false;
   var isGameShowingPattern = false;
   var isGameShowingWinOrLoss = false;
   var isPlayerTryingPattern = false;
@@ -73,7 +71,7 @@ $(function main() {
   // Clear and reset functions
   // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
   function clearGameButtons() {
-    for (let i of gameButtons)
+    for (var i of gameButtons)
       i.dim();
   }
 
@@ -86,8 +84,8 @@ $(function main() {
     victory.end();
     defeat.end();
     stopPattern();   // call order is important
-    stopPlayerTry(); // stopPattern() calls startPlayerTry() so stop it here
-    startOff();
+    stopPlayerTry(); // stopPattern() calls startPlayerTry() so stop it here    
+    start.off();
     clearPattern(); // call last to make sure Count updates properly.
   }
 
@@ -95,32 +93,35 @@ $(function main() {
   // victory definition
   // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
   var victory = (function defineVictory() {
-    const victoryPace = 200;
-    const victoryLength = 2990;
+    const pace = 200;
+    const length = 2990;
+    var isActive = false;
+    var stepInterval = null;
+    var endTimeout = null;
     var curButton = 0;
-    var intervalStep = null;
-    var timeoutEnd = null;
 
     function step() {
       if (curButton > 3)
         curButton = 0;
 
       clearGameButtons();
-      gameButtons[curButton].light(victoryPace);
+      gameButtons[curButton].light(pace);
       curButton++;
     }
 
     function begin() {
+      isActive = true;
       updateCountDisplay();
-      intervalStep = setInterval(step, victoryPace);
-      timeoutEnd = setTimeout(end, victoryLength);
+      stepInterval = setInterval(step, pace);
+      endTimeout = setTimeout(end, length);
     }
 
     function end() {
+      isActive = false;
       clearGameButtons();
-      clearInterval(intervalStep);
-      clearTimeout(timeoutEnd);
-      startOff();
+      clearInterval(stepInterval);
+      clearTimeout(endTimeout);
+      start.off();
       updateCountDisplay();
     }
 
@@ -134,8 +135,9 @@ $(function main() {
   // defeat definition
   // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
   var defeat = (function defineDefeat() {
-    const flickerPace = 250;
+    const pace = 250;
     const length = 2000;
+    var isActive = false;
     var stepInterval = null;
     var endTimeout = null;
     var curStep = 0;
@@ -153,12 +155,14 @@ $(function main() {
     }
 
     function begin() {
+      isActive = true;
       curStep = 0;
-      stepInterval = setInterval(step, flickerPace);
+      stepInterval = setInterval(step, pace);
       endTimeout = setTimeout(end, length);
     }
 
     function end() {
+      isActive = false;
       clearInterval(stepInterval);
       clearTimeout(endTimeout);
       updateCountDisplay();
@@ -175,7 +179,7 @@ $(function main() {
   // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
   function turnOff() {
     reset();
-    strictOff();
+    strict.off();
     isOn = false;
     $("button, #display").removeClass("on");
   }
@@ -197,46 +201,65 @@ $(function main() {
   // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
   // Start functions
   // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-  function startOff() {
-    $("#start button").removeClass("selected");
-    isStarted = false;
-  }
+  var start = (function defineStart() {
+    var isActive = false;
 
-  function startOn() {
-    $("#start button").addClass("selected");
-    isStarted = true;
+    function on() {
+      $("#start button").addClass("selected");
+      isActive = true;
 
-    startPattern();
-  }
+      startPattern();
+    }
 
-  function handleStart() {
-    if (!isOn || isStarted)
-      return;
-    else
-      startOn();
-  }
+    function off() {
+      $("#start button").removeClass("selected");
+      isActive = false;
+    }
+
+    function click() {
+      if (!isOn || isActive)
+        return;
+      else
+        on();
+    }
+
+    return {
+      off: off,
+      click: click,
+      get isActive() { return isActive; }
+    };
+  })();
 
   // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-  // Strict functions
-  // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-  function strictOff() {
-    $("#strict button").removeClass("selected");
-    isStrict = false;
-  }
+  // Strict definition
+  // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *  
+  var strict = (function defineStrict() {
+    var isActive = false;
 
-  function strictOn() {
-    $("#strict button").addClass("selected");
-    isStrict = true;
-  }
+    function on() {
+      $("#strict button").addClass("selected");
+      isActive = true;
+    }
 
-  function handleStrict(val) {
-    if (!isOn || isStarted)
-      return;
-    else if (isStrict)
-      strictOff();
-    else
-      strictOn();
-  }
+    function off() {
+      $("#strict button").removeClass("selected");
+      isActive = false;
+    }
+
+    function click() {
+      if (!isOn || start.isActive)
+        return;
+      else if (isActive)
+        off();
+      else
+        on();
+    }
+    return {
+      off: off,
+      click: click,
+      get isActive() { return isActive; }
+    };
+  })();
 
   // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
   // Pattern display functions
@@ -311,7 +334,7 @@ $(function main() {
     var playerEntry = gameButtonIndexMap[this.id];
 
     if (playerEntry !== pattern[playerEntryCount]) {
-      if (isStrict) {
+      if (strict.isActive) {
         reset();
         defeat.begin();
       }
@@ -339,7 +362,7 @@ $(function main() {
   // Count display function
   // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *  
   function updateCountDisplay() {
-    if (!isOn || !isStarted)
+    if (!isOn || !start.isActive)
       $("#display").html("--");
     else
       $("#display").html(pattern.length);
@@ -349,8 +372,8 @@ $(function main() {
   // Event Handlers
   // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *  
   $("input").click(handleOnOff);
-  $("#start button").click(handleStart);
-  $("#strict button").click(handleStrict);
+  $("#start button").click(start.click);
+  $("#strict button").click(strict.click);
   $(".game-button").mousedown(prePlayerTry);
   $(".game-button").mouseup(handlePlayerTry);
   $(".game-button").mouseleave(handlePlayerTry);
