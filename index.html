@@ -1,73 +1,22 @@
 <!-- Doctype HTML5 -->
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en" dir="ltr">
 
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="x-ua-compatible" content="ie=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Simon Game</title>
-	<meta name="description" content='This is my submission for the "Build a Simon Game" project on www.freecodecamp.com.'>
+	<title>Sound Test</title>
+	<meta name="description" content='Testing Chrome sound issues.'>
 	<meta name="author" content="Samuel Newhouse">
-	<!--  Use async and defer to speed up loading.  http://www.growingwiththeweb.com/2014/02/async-vs-defer-attributes.html  -->
-	<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
-	 crossorigin="anonymous">
-	</script>
-	<script src="scripts/script.js" async defer></script>
-	<link href="styles/style.css" rel="stylesheet" type="text/css">
 </head>
 
 <body>
+	<audio id="sound1" src="sounds/simonSound1.mp3"></audio>
 
-	<header>
-		<h1>Simon Game</h1>
-	</header>
-
-	<section>
-		<div id="full-game">
-
-			<div class="game-button" id="top-left"></div>
-			<div class="game-button" id="top-right"></div>
-			<div class="clearfix"></div>
-			<div class="game-button" id="bottom-left"></div>
-			<div class="game-button" id="bottom-right"></div>
-
-			<div id="circle"></div>
-
-			<div id="center" class="flex-container">
-				<div id="count" class="flex-container">
-					<div id="display">--</div>
-					<div>Count</div>
-				</div>
-				<div id="start" class="flex-container">
-					<button type="button"></button>
-					<div>Start</div>
-				</div>
-				<div id="strict" class="flex-container">
-					<button type="button"></button>
-					<div>Strict</div>
-				</div>
-				<div id="switch" class="flex-container">
-					<div>Off</div>
-					<label class="switch-mechanism">
-						<input type="checkbox">
-						<span class="slider"></span>
-					</label>
-					<div>On</div>
-				</div>
-			</div>
-		</div>
-	</section>
-
-	<footer>Made by
-		<a href="https://github.com/SamuelNewhouse" target="_blank">Samuel Newhouse</a>
-	</footer>
-
-	<audio id="sound1" src="sounds/simonSound1.mp3"/>
-	<audio id="sound2" src="sounds/simonSound2.mp3"/>
-	<audio id="sound3" src="sounds/simonSound3.mp3"/>
-	<audio id="sound4" src="sounds/simonSound4.mp3"/>
-
+	<script>
+		document.getElementById("sound1").play();
+	</script>
 </body>
 
 </html>
