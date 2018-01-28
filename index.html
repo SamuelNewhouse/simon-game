@@ -15,7 +15,16 @@
 	<audio id="sound1" src="sounds/simonSound1.mp3"></audio>
 
 	<script>
-		document.getElementById("sound1").play();
+		const sound = document.getElementById("sound1");
+
+		// Audio plays fine in every browser but Chrome.
+		// Chrome clips off the end of the sound before it completes.
+		sound.play();
+
+		// This also works fine in every browswer but Chrome.
+		// Sound doesn't play at all in Chrome after the intial attempt.
+		setInterval(sound.play.bind(sound), 600);
+		
 	</script>
 </body>
 
