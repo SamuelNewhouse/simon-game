@@ -1,5 +1,3 @@
-# Simon Game
+# Chrome audio test
 
-This is my submission for the "Build a Simon Game" project on www.freecodecamp.com.
-
-View here: https://samuelnewhouse.github.io/simon-game/
+I've been having issues for some time getting audio to play properly in Chrome. Now it won't even play a sound one time properly. Trying to play a sound more than once completely fails after the first attempt.
